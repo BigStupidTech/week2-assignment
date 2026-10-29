@@ -1,0 +1,65 @@
+Library database
+
+library.db is a SQLite database based on library-notes.txt.
+
+Books describe titles. Book copies describe the actual copies on the shelves,
+including their barcodes, condition, location, and whether they were bought or donated.
+Members have a library card number and at least one contact method.
+Loans record borrowing, due dates, returns, renewals, and the last reminder.
+Reservations are for a title rather than one copy. Order the waiting list by
+requested_at, then reservation_id to break ties.
+
+The personal touch is Friday Night VHS Club: popcorn, old tapes, and a chat
+afterward. Its suggested time is Friday at 7 pm in the reading room. This is an
+editable recurring idea with five fictional screenings for practice. Add dates to events,
+choose a tape from vhs_tapes, and use event_signups to track attendance.
+Other activities can use events too, without a tape or recurring series.
+
+The first 25 data records from books.csv have been imported into books, including
+their authors, source ISBN text, original publication year, and language.
+Subjects and editions remain blank because the CSV has no dedicated fields for them.
+Fictional sample data has now been added: 6 members, 10 book copies, 12 loans,
+5 invented VHS titles, 5 Friday screenings, and 13 movie-night signups.
+These are assignment examples, not real people, inventory, or bookings.
+
+Useful queries:
+SELECT * FROM copy_availability;
+SELECT * FROM overdue_loans;
+SELECT * FROM event_series;
+SELECT * FROM reservations WHERE status = 'waiting'
+ORDER BY requested_at, reservation_id;
+
+To record a return, set loans.returned_on to the return date. Availability is
+calculated from open loans, so there is no separate borrowed flag to forget.
+To renew, update due_on. The database increments renewal_count and blocks an
+extension if someone else has an active reservation for that title.
+
+Use YYYY-MM-DD for dates and YYYY-MM-DD HH:MM for event times (local library time).
+Default request/signup timestamps use UTC. Date text must be validated by the
+application. Enable PRAGMA foreign_keys = ON on EVERY SQLite connection.
+
+The database prevents two open loans for one copy, duplicate active reservations,
+and signups beyond an event's capacity. Staff or a future application still need
+to manage reservation fulfillment, send reminders, and handle cancelled signups.
+Do not directly change the copy/member on an existing loan; return it and create
+a new loan. Capacity checks apply when adding signups; do not lower capacity
+below existing attendance bookings.
+
+schema.sql documents the structure and can build a fresh database. It should
+not be rerun against an existing populated database.
+
+Open from PowerShell in this folder with Python's SQLite shell:
+py -m sqlite3 library.db
+Then run: PRAGMA foreign_keys = ON;
+
+Sample data notes (as of October 28, 2026):
+8 loans are returned, 2 are overdue, and 2 are still out but not yet due.
+June Carter and Theo Reed have never borrowed. June attends movie nights;
+Theo has never signed up for one. Four screenings are completed and one is
+upcoming on October 30. There are 8 past attendances, 2 past no-shows, and
+3 upcoming signups. Upcoming attended=0 means not attended yet, not a no-show.
+The October 30 screening is fully booked (3 seats).
+Movie screenings do not have an overdue state; overdue applies to book loans.
+Dates are fixed examples, so which loans are overdue will change over time.
+sample-data.sql records these fictional inserts. It is for one-time use on the
+original database before sample data; do not rerun it against this populated file.

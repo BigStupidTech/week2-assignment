@@ -1,0 +1,11 @@
+If I owned a library, I would want to know what books we have and whether people can borrow them. We would need the title, author, subject, and where the book belongs on the shelf. We should also know if a copy is damaged or missing.
+
+One thing I might not think about at first is that we can have several copies of the same book. One person could have a copy at home while another copy is still available. So each copy needs its own number or some way to tell it apart.
+
+For someone borrowing a book, we need their name, library card number, and a way to contact them. We need to know which books they borrowed and when they should bring them back. I don't think we need much personal information beyond what helps with that.
+
+When a book comes back, someone needs to record the return and put it back where it belongs. If it is late, we could send a reminder. Sometimes a person just needs more time, so we should be able to extend the loan if nobody else is waiting.
+
+People should also be able to ask for a book that is already borrowed. We would keep track of who asked first and let them know when it comes back.
+
+There are other things too, like buying books, accepting donations, and organizing activities. But I would start with keeping track of the books, the people borrowing them, and the returns. That seems like the information staff would use most days.

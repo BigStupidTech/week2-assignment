@@ -1,0 +1,95 @@
+erDiagram
+    direction LR
+    book_copies {
+        INTEGER copy_id PK "required"
+        INTEGER book_id FK "required"
+        TEXT barcode UK "required"
+        TEXT shelf_location "required"
+        TEXT condition "required"
+        TEXT status "required"
+        TEXT acquired_on "nullable"
+        TEXT acquisition_method "nullable"
+        TEXT notes "nullable"
+    }
+    books ||..o{ book_copies : "book_id"
+    books {
+        INTEGER book_id PK "required"
+        TEXT title "required"
+        TEXT authors "required"
+        TEXT subject "nullable"
+        TEXT isbn "nullable"
+        INTEGER publication_year "nullable"
+        TEXT language "nullable"
+        TEXT edition "nullable"
+    }
+    event_series {
+        INTEGER series_id PK "required"
+        TEXT name "required"
+        TEXT description "nullable"
+        INTEGER weekday "nullable"
+        TEXT usual_start_time "nullable"
+        TEXT location "nullable"
+    }
+    event_signups {
+        INTEGER event_id PK, FK "required"
+        INTEGER member_id PK, FK "required"
+        TEXT signed_up_at "required"
+        INTEGER attended "required"
+    }
+    members ||--o{ event_signups : "member_id"
+    events ||--o{ event_signups : "event_id"
+    events {
+        INTEGER event_id PK "required"
+        INTEGER series_id FK "nullable"
+        TEXT name "required"
+        TEXT starts_at "required"
+        TEXT location "required"
+        INTEGER tape_id FK "nullable"
+        INTEGER capacity "nullable"
+        TEXT status "required"
+        TEXT notes "nullable"
+    }
+    vhs_tapes |o..o{ events : "tape_id"
+    event_series |o..o{ events : "series_id"
+    loans {
+        INTEGER loan_id PK "required"
+        INTEGER copy_id FK "required"
+        INTEGER member_id FK "required"
+        TEXT borrowed_on "required"
+        TEXT due_on "required"
+        TEXT returned_on "nullable"
+        INTEGER renewal_count "required"
+        TEXT last_reminded_on "nullable"
+    }
+    members ||..o{ loans : "member_id"
+    book_copies ||..o{ loans : "copy_id"
+    members {
+        INTEGER member_id PK "required"
+        TEXT card_number UK "required"
+        TEXT name "required"
+        TEXT email "nullable"
+        TEXT phone "nullable"
+        INTEGER active "required"
+    }
+    reservations {
+        INTEGER reservation_id PK "required"
+        INTEGER book_id FK "required"
+        INTEGER member_id FK "required"
+        TEXT requested_at "required"
+        TEXT status "required"
+        TEXT notified_at "nullable"
+        TEXT collect_by "nullable"
+    }
+    members ||..o{ reservations : "member_id"
+    books ||..o{ reservations : "book_id"
+    vhs_tapes {
+        INTEGER tape_id PK "required"
+        TEXT barcode UK "required"
+        TEXT title "required"
+        INTEGER release_year "nullable"
+        INTEGER runtime_minutes "nullable"
+        TEXT age_rating "nullable"
+        TEXT shelf_location "nullable"
+        TEXT condition "required"
+        TEXT notes "nullable"
+    }
